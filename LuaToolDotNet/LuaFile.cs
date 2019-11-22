@@ -10,7 +10,8 @@ namespace LuaToolDotNet
     {
         #region Structures
 
-        Undumper undumper;
+        IOUtils.Undumper undumper;
+        IOUtils.Dumper dumper;
 
         public LuaHeader FileHeader = new LuaHeader();
         public FuncNode FunctionTree = new FuncNode();
@@ -233,19 +234,107 @@ namespace LuaToolDotNet
 
         #endregion
 
-        public LuaFile(Undumper undumper)
-        {
-            this.undumper = undumper;
-
-            LoadFile();
-        }
-
         public LuaFile()
         {
-
+            
         }
 
-        void LoadFile()
+        public void LoadFile(string fileName)
+        {
+            undumper = new IOUtils.Undumper(fileName);
+
+            LoadLuaFile();
+        }
+
+        public void SaveFile(string fileName)
+        {
+            dumper = new IOUtils.Dumper(fileName);
+
+            DumpLuaFile();
+        }
+
+        #region Interfaces
+        public List<LuaFunction> GetLuaFunctions()
+        {
+            List<LuaFunction> functions = new List<LuaFunction>();
+
+            functions.AddRange(GetFunc(FunctionTree));
+
+            return functions;
+        }
+
+        private List<LuaFunction> GetFunc(FuncNode curNode)
+        {
+            List<LuaFunction> functions = new List<LuaFunction>();
+
+            functions.Add(curNode.Function);
+
+            foreach (var cur in curNode.Childs)
+            {
+                functions.AddRange(GetFunc(cur));
+            }
+
+            return functions;
+        }
+
+        public LuaFunction FindFunction(string index)
+        {
+            return FindFunc(FunctionTree, index);
+        }
+
+        private LuaFunction FindFunc(FuncNode curNode, string index)
+        {
+            string[] indexes = index.Split(',');
+
+            int linedefined = int.Parse(indexes[0]);
+            int lastline = int.Parse(indexes[1]);
+
+            LuaFunction function = null;
+
+            if (curNode.Function.Header.LineDefined == linedefined && curNode.Function.Header.LastLineDefined == lastline)
+                function = curNode.Function;
+            else
+                foreach (var cur in curNode.Childs)
+                    if ((function = FindFunc(cur, index)) != null)
+                        break;
+
+            return function;
+        }
+
+        public bool SetFunction(LuaFunction function, string index)
+        {
+            return SetFunc(FunctionTree, function, index);
+        }
+
+        private bool SetFunc(FuncNode curNode, LuaFunction function, string index)
+        {
+            string[] indexes = index.Split(',');
+
+            int linedefined = int.Parse(indexes[0]);
+            int lastline = int.Parse(indexes[1]);
+
+            if (curNode.Function.Header.LineDefined == linedefined && curNode.Function.Header.LastLineDefined == lastline)
+            {
+                curNode.Function = function;
+
+                return true;
+            }
+            else
+            {
+                foreach (var cur in curNode.Childs)
+                {
+                    if (SetFunc(cur, function, index) != false)
+                        return true;
+                }
+            }
+
+            return false;
+        }
+        #endregion
+
+
+        #region Undump
+        private void LoadLuaFile()
         {
             LoadFileHeader();
             LoadFunctions();
@@ -404,82 +493,14 @@ namespace LuaToolDotNet
 
             return debug;
         }
+        #endregion
 
-        public List<LuaFunction> GetLuaFunctions()
+        #region Dump
+        private void DumpLuaFile()
         {
-            List<LuaFunction> functions = new List<LuaFunction>();
 
-            functions.AddRange(GetFunc(FunctionTree));
-
-            return functions;
         }
 
-        private List<LuaFunction> GetFunc(FuncNode curNode)
-        {
-            List<LuaFunction> functions = new List<LuaFunction>();
-
-            functions.Add(curNode.Function);
-
-            foreach(var cur in curNode.Childs)
-            {
-                functions.AddRange(GetFunc(cur));
-            }
-
-            return functions;
-        }
-
-        public LuaFunction FindFunction(string index)
-        {
-            return FindFunc(FunctionTree, index);
-        }
-
-        private LuaFunction FindFunc(FuncNode curNode, string index)
-        {
-            string[] indexes = index.Split(',');
-
-            int linedefined = int.Parse(indexes[0]);
-            int lastline = int.Parse(indexes[1]);
-
-            LuaFunction function = null;
-
-            if (curNode.Function.Header.LineDefined == linedefined && curNode.Function.Header.LastLineDefined == lastline)
-                function = curNode.Function;
-            else
-                foreach (var cur in curNode.Childs)
-                    if ((function = FindFunc(cur, index)) != null)
-                        break;
-
-            return function;
-        }
-
-        public bool SetFunction(LuaFunction function, string index)
-        {
-            return SetFunc(FunctionTree, function, index);
-        }
-
-        private bool SetFunc(FuncNode curNode, LuaFunction function, string index)
-        {
-            string[] indexes = index.Split(',');
-
-            int linedefined = int.Parse(indexes[0]);
-            int lastline = int.Parse(indexes[1]);
-
-            if (curNode.Function.Header.LineDefined == linedefined && curNode.Function.Header.LastLineDefined == lastline)
-            {
-                curNode.Function = function;
-
-                return true;
-            }
-            else
-            {
-                foreach (var cur in curNode.Childs)
-                {
-                    if (SetFunc(cur, function, index) != false)
-                        return true;
-                }
-            }
-
-            return false;
-        }
+        #endregion
     }
 }

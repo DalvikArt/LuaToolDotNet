@@ -8,7 +8,7 @@ namespace LuaToolDotNet
 {
     static class Global
     {
-        public static LuaFile luaFile;
+        public static LuaFile luaFile = new LuaFile();
         public static string fileName = "";
 
         public static ConstantTableForm constantTableForm = null;

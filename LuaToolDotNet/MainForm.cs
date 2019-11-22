@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace LuaToolDotNet
 {
@@ -23,8 +24,7 @@ namespace LuaToolDotNet
         private void LoadFile(string fileName)
         {
             Global.fileName = fileName;
-            Undumper undumper = new Undumper(fileName);
-            Global.luaFile = new LuaFile(undumper);
+            Global.luaFile.LoadFile(fileName);
 
             UpdateFunctionList();
             UpdateControls();
@@ -69,7 +69,7 @@ namespace LuaToolDotNet
 
         private void mainForm_Load(object sender, EventArgs e)
         {
-            labelFunction.BackColor = Color.Transparent;
+
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -145,11 +145,30 @@ namespace LuaToolDotNet
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openDialog = new OpenFileDialog() { Title = "Select Lua Bytecode File", Filter = "Luac Output File|*.out|Lua Bytecode|*.lua|Binary File|*.bin|All Files|*.*", DefaultExt = "*.lua" };
+            OpenFileDialog openDialog = new OpenFileDialog() { Title = "Select Lua Bytecode File", Filter = "Luac Output File|*.out|Lua Bytecode|*.lua|Binary File|*.bin|All Files|*.*" };
 
             if(openDialog.ShowDialog() == DialogResult.OK)
             {
                 LoadFile(openDialog.FileName);
+            }
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(!File.Exists(Global.fileName))
+            {
+                saveAsToolStripMenuItem_Click(sender, e);
+                return;
+            }
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveDialog = new SaveFileDialog() { Title = "Save Bytecode File", Filter = "Luac Output File|*.out|Lua Bytecode|*.lua|Binary File|*.bin|All Files|*.*" };
+
+            if (saveDialog.ShowDialog() == DialogResult.OK)
+            {
+                Global.luaFile.SaveFile(saveDialog.FileName);
             }
         }
     }
