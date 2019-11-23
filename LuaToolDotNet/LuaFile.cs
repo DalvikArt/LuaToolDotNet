@@ -265,6 +265,8 @@ namespace LuaToolDotNet
             dumper = new IOUtils.Dumper(fileName);
 
             DumpLuaFile();
+
+            dumper.Close();
         }
 
         #region Interfaces
@@ -553,7 +555,7 @@ namespace LuaToolDotNet
 
             DumpCode(curFunc.Function.Code);
             DumpConstants(curFunc);
-            DumpDebug();
+            DumpDebug(curFunc.Function.Debug);
         }
 
         private void DumpCode(List<Instruction> code)
@@ -574,6 +576,8 @@ namespace LuaToolDotNet
 
             foreach(var cur in curFunc.Function.Constants)
             {
+                dumper.Dump((byte)cur.Type);
+
                 switch(cur.Type)
                 {
                     case ConstantType.LUA_TNIL:
@@ -604,9 +608,23 @@ namespace LuaToolDotNet
             }
         }
 
-        private void DumpDebug()
+        private void DumpDebug(DebugInfo debug)
         {
+            dumper.Dump(debug.LineInfo.Count);
+            foreach (var cur in debug.LineInfo)
+                dumper.Dump(cur);
 
+            dumper.Dump(debug.LocVars.Count);
+            foreach (var cur in debug.LocVars)
+            {
+                dumper.Dump(cur.VarName);
+                dumper.Dump(cur.StartPC);
+                dumper.Dump(cur.EndPC);
+            }
+
+            dumper.Dump(debug.UpValues.Count);
+            foreach (var cur in debug.UpValues)
+                dumper.Dump(cur);
         }
 
         #endregion
