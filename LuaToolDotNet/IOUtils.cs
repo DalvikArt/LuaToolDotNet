@@ -102,9 +102,23 @@ namespace LuaToolDotNet
                 fsLuaFile.Write(buf, 0, buf.Length);
             }
 
+            public void Dump(bool dump)
+            {
+                byte[] buf = new byte[1] { (byte)(dump ? 1 : 0) };
+
+                fsLuaFile.Write(buf, 0, buf.Length);
+            }
+
             public void Dump(byte[] dump)
             {
                 fsLuaFile.Write(dump, 0, dump.Length);
+            }
+
+            public void Dump(double dump)
+            {
+                byte[] buf = BitConverter.GetBytes(dump);
+
+                fsLuaFile.Write(buf, 0, buf.Length);
             }
 
             public void Dump(string dump)

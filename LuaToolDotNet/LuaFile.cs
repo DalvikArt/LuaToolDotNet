@@ -498,6 +498,93 @@ namespace LuaToolDotNet
         #region Dump
         private void DumpLuaFile()
         {
+            DumpFileHeader();
+            DumpFunctions();
+        }
+
+        private void DumpFileHeader()
+        {
+            dumper.Dump(FileHeader.Signature);
+            dumper.Dump(FileHeader.Version);
+            dumper.Dump(FileHeader.Format);
+            dumper.Dump(FileHeader.IsBigEndian);
+            dumper.Dump(FileHeader.SizeOfInt);
+            dumper.Dump(FileHeader.SizeOfSizeT);
+            dumper.Dump(FileHeader.SizeOfInstruction);
+            dumper.Dump(FileHeader.SizeOfLuaNumber);
+            dumper.Dump(FileHeader.LuaNumIntegral);
+        }
+
+        private void DumpFunctions()
+        {
+            DumpFunction(FunctionTree);
+        }
+
+        private void DumpFunction(FuncNode curFunc)
+        {
+            dumper.Dump(curFunc.Function.Header.Name);
+            dumper.Dump(curFunc.Function.Header.LineDefined);
+            dumper.Dump(curFunc.Function.Header.LastLineDefined);
+            dumper.Dump(curFunc.Function.Header.Nups);
+            dumper.Dump(curFunc.Function.Header.NumOfParams);
+            dumper.Dump(curFunc.Function.Header.IsVarArg);
+            dumper.Dump(curFunc.Function.Header.MaxStackSize);
+
+            DumpCode(curFunc.Function.Code);
+            DumpConstants(curFunc);
+            DumpDebug();
+        }
+
+        private void DumpCode(List<Instruction> code)
+        {
+            dumper.Dump(code.Count);
+
+            foreach(var cur in code)
+            {
+                uint instruction = (uint)cur.Operation + cur.Params;
+
+                dumper.Dump(instruction);
+            }
+        }
+
+        private void DumpConstants(FuncNode curFunc)
+        {
+            dumper.Dump(curFunc.Function.Constants.Count);
+
+            foreach(var cur in curFunc.Function.Constants)
+            {
+                switch(cur.Type)
+                {
+                    case ConstantType.LUA_TNIL:
+
+                        break;
+
+                    case ConstantType.LUA_TBOOLEAN:
+                        dumper.Dump((cur as LuaBoolean).Value);
+                        break;
+
+                    case ConstantType.LUA_TNUMBER:
+                        dumper.Dump((cur as LuaNumber).Value);
+                        break;
+
+                    case ConstantType.LUA_TSTRING:
+                        dumper.Dump((cur as LuaString).Value);
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            dumper.Dump(curFunc.Childs.Count);
+            foreach(var cur in curFunc.Childs)
+            {
+                DumpFunction(cur);
+            }
+        }
+
+        private void DumpDebug()
+        {
 
         }
 
