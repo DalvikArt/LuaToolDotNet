@@ -130,12 +130,26 @@ namespace LuaToolDotNet
             }
         }
 
+        public class DebugInfo
+        {
+            public class LocVar
+            {
+                public string VarName;
+                public int StartPC;
+                public int EndPC;
+            }
+
+            public List<int> LineInfo = new List<int>();
+            public List<LocVar> LocVars = new List<LocVar>();
+            public List<string> UpValues = new List<string>();
+        }
+
         public class LuaFunction
         {
             public FunctionHeader Header = new FunctionHeader();
             public List<Instruction> Code;
             public List<LuaConstant> Constants;
-            public byte[] Debug;
+            public DebugInfo Debug;
         }
 
         public class FuncNode
@@ -471,24 +485,31 @@ namespace LuaToolDotNet
             return luaConstants;
         }
 
-        byte[] LoadDebug()
+        DebugInfo LoadDebug()
         {
-            byte[] debug = new byte[10];
+            DebugInfo debug = new DebugInfo();
 
             int n = undumper.LoadInt();
-            undumper.LoadBlock(n * sizeof(int));
-
-            n = undumper.LoadInt();
             for (int i = 0; i < n; ++i)
             {
-                undumper.LoadString();
-                undumper.LoadBlock(sizeof(int) * 2);
+                debug.LineInfo.Add(undumper.LoadInt());
             }
 
             n = undumper.LoadInt();
             for (int i = 0; i < n; ++i)
             {
-                undumper.LoadString();
+                DebugInfo.LocVar curVar = new DebugInfo.LocVar();
+                curVar.VarName = undumper.LoadString();
+                curVar.StartPC = undumper.LoadInt();
+                curVar.EndPC = undumper.LoadInt();
+
+                debug.LocVars.Add(curVar);
+            }
+
+            n = undumper.LoadInt();
+            for (int i = 0; i < n; ++i)
+            {
+                debug.UpValues.Add(undumper.LoadString());
             }
 
             return debug;
