@@ -40,7 +40,7 @@ namespace LuaToolDotNet
             public byte[] Signature = new byte[LUA_SIGNATURE.Length];
             public byte Version;
             public byte Format;
-            public byte IsBigEndian;
+            public byte IsLittleEndian;
             public byte SizeOfInt;
             public byte SizeOfSizeT;
             public byte SizeOfInstruction;
@@ -361,7 +361,7 @@ namespace LuaToolDotNet
             FileHeader.Signature = undumper.LoadBlock(LUA_SIGNATURE.Length);
             FileHeader.Version = undumper.LoadByte();
             FileHeader.Format = undumper.LoadByte();
-            FileHeader.IsBigEndian = undumper.LoadByte();
+            FileHeader.IsLittleEndian = undumper.LoadByte();
             FileHeader.SizeOfInt = undumper.LoadByte();
             FileHeader.SizeOfSizeT = undumper.LoadByte();
             FileHeader.SizeOfInstruction = undumper.LoadByte();
@@ -530,7 +530,7 @@ namespace LuaToolDotNet
             dumper.Dump(FileHeader.Signature);
             dumper.Dump(FileHeader.Version);
             dumper.Dump(FileHeader.Format);
-            dumper.Dump(FileHeader.IsBigEndian);
+            dumper.Dump(FileHeader.IsLittleEndian);
             dumper.Dump(FileHeader.SizeOfInt);
             dumper.Dump(FileHeader.SizeOfSizeT);
             dumper.Dump(FileHeader.SizeOfInstruction);

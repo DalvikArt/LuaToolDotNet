@@ -24,6 +24,7 @@ namespace LuaToolDotNet
         private void LoadFile(string fileName)
         {
             Global.fileName = fileName;
+            Global.luaFile = new LuaFile();
             Global.luaFile.LoadFile(fileName);
 
             UpdateFunctionList();
@@ -32,8 +33,6 @@ namespace LuaToolDotNet
 
         private void UpdateFunctionList()
         {
-            listViewMain.Enabled = true;
-
             List<LuaFile.LuaFunction> functions = Global.luaFile.GetLuaFunctions();
 
             foreach (var curFunc in functions)
@@ -129,6 +128,12 @@ namespace LuaToolDotNet
 
         private void constantTableToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if(comboBoxFunctionList.SelectedIndex == -1)
+            {
+                ErrorInfo.NoFunctionSelected();
+                return;
+            }
+
             if(Global.constantTableForm != null)
             {
                 Global.constantTableForm.Close();
@@ -155,21 +160,60 @@ namespace LuaToolDotNet
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if(Global.luaFile == null)
+            {
+                ErrorInfo.NoFileOpened();
+                return;
+            }
+
             if(!File.Exists(Global.fileName))
             {
                 saveAsToolStripMenuItem_Click(sender, e);
                 return;
             }
+
+            if (MessageBox.Show("Save file?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Global.luaFile.SaveFile(Global.fileName);
+            }
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveDialog = new SaveFileDialog() { Title = "Save Bytecode File", Filter = "Luac Output File|*.out|Lua Bytecode|*.lua|Binary File|*.bin|All Files|*.*" };
+            if (Global.luaFile == null)
+            {
+                ErrorInfo.NoFileOpened();
+                return;
+            }
+
+            SaveFileDialog saveDialog = new SaveFileDialog() { Title = "Save Bytecode File", Filter = "Luac Output File|*.out|Lua Bytecode|*.lua|Binary File|*.bin|All Files|*.*", DefaultExt = ".out" };
 
             if (saveDialog.ShowDialog() == DialogResult.OK)
             {
                 Global.luaFile.SaveFile(saveDialog.FileName);
             }
+        }
+
+        private void fileInfoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Global.luaFile == null)
+                ErrorInfo.NoFileOpened();
+            else
+                new FileInfoForm(Global.luaFile.FileHeader, Global.fileName).ShowDialog();
+        }
+
+        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Global.fileName = "";
+            Global.luaFile = null;
+            listViewMain.Items.Clear();
+            comboBoxFunctionList.Items.Clear();
+            comboBoxFunctionList.SelectedIndex = -1;
+        }
+
+        private void functionInfoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

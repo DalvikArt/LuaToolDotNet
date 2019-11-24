@@ -133,8 +133,6 @@ namespace LuaToolDotNet
             {
                 fsLuaFile?.Close();
             }
-            
-            
         }
     }
 }
