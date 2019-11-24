@@ -140,7 +140,7 @@
             // 
             this.fileInfoToolStripMenuItem.Name = "fileInfoToolStripMenuItem";
             this.fileInfoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.fileInfoToolStripMenuItem.Text = "FileInfo";
+            this.fileInfoToolStripMenuItem.Text = "File Info";
             this.fileInfoToolStripMenuItem.Click += new System.EventHandler(this.fileInfoToolStripMenuItem_Click);
             // 
             // closeToolStripMenuItem

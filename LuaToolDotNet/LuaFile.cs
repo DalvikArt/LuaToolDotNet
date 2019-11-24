@@ -54,7 +54,7 @@ namespace LuaToolDotNet
             public int LineDefined;
             public int LastLineDefined;
             public byte Nups;
-            public byte NumOfParams;
+            public byte NumOfArgs;
             public byte IsVarArg;
             public byte MaxStackSize;
         }
@@ -385,7 +385,7 @@ namespace LuaToolDotNet
             curNode.Function.Header.LineDefined = undumper.LoadInt();
             curNode.Function.Header.LastLineDefined = undumper.LoadInt();
             curNode.Function.Header.Nups = undumper.LoadByte();
-            curNode.Function.Header.NumOfParams = undumper.LoadByte();
+            curNode.Function.Header.NumOfArgs = undumper.LoadByte();
             curNode.Function.Header.IsVarArg = undumper.LoadByte();
             curNode.Function.Header.MaxStackSize = undumper.LoadByte();
 
@@ -549,7 +549,7 @@ namespace LuaToolDotNet
             dumper.Dump(curFunc.Function.Header.LineDefined);
             dumper.Dump(curFunc.Function.Header.LastLineDefined);
             dumper.Dump(curFunc.Function.Header.Nups);
-            dumper.Dump(curFunc.Function.Header.NumOfParams);
+            dumper.Dump(curFunc.Function.Header.NumOfArgs);
             dumper.Dump(curFunc.Function.Header.IsVarArg);
             dumper.Dump(curFunc.Function.Header.MaxStackSize);
 

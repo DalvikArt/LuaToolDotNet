@@ -213,7 +213,13 @@ namespace LuaToolDotNet
 
         private void functionInfoToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if(comboBoxFunctionList.SelectedIndex == -1)
+            {
+                ErrorInfo.NoFunctionSelected();
+                return;
+            }
 
+            new FunctionInfoForm(curFunction.Header, comboBoxFunctionList.SelectedItem.ToString()).ShowDialog();
         }
     }
 }

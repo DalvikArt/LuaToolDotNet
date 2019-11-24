@@ -65,6 +65,12 @@
     <Compile Include="FileInfoForm.Designer.cs">
       <DependentUpon>FileInfoForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FunctionInfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FunctionInfoForm.Designer.cs">
+      <DependentUpon>FunctionInfoForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Global.cs" />
     <Compile Include="InstructionForm.cs">
       <SubType>Form</SubType>
@@ -90,6 +96,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FileInfoForm.resx">
       <DependentUpon>FileInfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FunctionInfoForm.resx">
+      <DependentUpon>FunctionInfoForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InstructionForm.resx">
       <DependentUpon>InstructionForm.cs</DependentUpon>
@@ -118,6 +127,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ToDoList.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

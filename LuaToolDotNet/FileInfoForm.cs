@@ -39,12 +39,17 @@ namespace LuaToolDotNet
             labelInsSize.Text = _header.SizeOfInstruction.ToString();
             labelLuaNumSize.Text = _header.SizeOfLuaNumber.ToString();
             labelIntegral.Text = _header.LuaNumIntegral == 1 ? "No" : "Yes";
+
+            textBoxFileName.Select(textBoxFileName.Text.Length, 0);
         }
 
         private void textBoxFileName_TextChanged(object sender, EventArgs e)
         {
             if (textBoxFileName.Text != _fileName)
-                textBoxFileName.Text = _fileName;
+            { 
+                textBoxFileName.Text = _fileName; 
+                textBoxFileName.Select(textBoxFileName.Text.Length, 0); 
+            }
         }
     }
 }
