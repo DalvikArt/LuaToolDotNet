@@ -12,5 +12,10 @@ namespace LuaToolDotNet
         public static string fileName = "";
 
         public static ConstantTableForm constantTableForm = null;
+
+        public static string GetFuncName(LuaFile.LuaFunction func)
+        {
+            return func.Header.LineDefined.ToString() + "," + func.Header.LastLineDefined.ToString();
+        }
     }
 }

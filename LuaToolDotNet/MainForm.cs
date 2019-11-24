@@ -13,7 +13,8 @@ namespace LuaToolDotNet
 {
     public partial class MainForm : Form
     {
-        LuaFile.LuaFunction curFunction;
+        LuaFile.LuaFunction curFunction = null;
+        string curFuncName = null;
 
         public MainForm()
         {
@@ -27,26 +28,17 @@ namespace LuaToolDotNet
             Global.luaFile = new LuaFile();
             Global.luaFile.LoadFile(fileName);
 
-            UpdateFunctionList();
+            curFunction = Global.luaFile.FunctionTree.Function;
+            curFuncName = Global.GetFuncName(curFunction);
+
             UpdateControls();
-        }
-
-        private void UpdateFunctionList()
-        {
-            List<LuaFile.LuaFunction> functions = Global.luaFile.GetLuaFunctions();
-
-            foreach (var curFunc in functions)
-            {
-                comboBoxFunctionList.Items.Add(curFunc.Header.LineDefined.ToString() + "," + curFunc.Header.LastLineDefined.ToString());
-                comboBoxFunctionList.SelectedIndex = 0;
-            }
         }
 
         private void UpdateControls()
         {
             listViewMain.Items.Clear();
 
-            curFunction = Global.luaFile.FindFunction(comboBoxFunctionList.SelectedItem.ToString());
+            LuaFile.LuaFunction curFunction = Global.luaFile.FindFunction(curFuncName);
 
             for (int i = 0; i < curFunction.Code.Count; ++i)
             {
@@ -93,7 +85,7 @@ namespace LuaToolDotNet
                 return;
             }
 
-            InstructionForm insForm = new InstructionForm(comboBoxFunctionList.SelectedItem.ToString());
+            InstructionForm insForm = new InstructionForm(curFuncName);
             insForm.ShowDialog();
 
             if(insForm.Confirm)
@@ -110,7 +102,7 @@ namespace LuaToolDotNet
                 return;
             }
 
-            InstructionForm insForm = new InstructionForm(curFunction.Code[listViewMain.SelectedIndices[0]], listViewMain.SelectedIndices[0], comboBoxFunctionList.SelectedItem.ToString());
+            InstructionForm insForm = new InstructionForm(curFunction.Code[listViewMain.SelectedIndices[0]], listViewMain.SelectedIndices[0], curFuncName);
             insForm.ShowDialog();
 
             if (insForm.Confirm)
@@ -120,7 +112,7 @@ namespace LuaToolDotNet
 
                 curFunction.Code.Insert(insForm.Index, insForm.Result);
 
-                Global.luaFile.SetFunction(curFunction, comboBoxFunctionList.SelectedItem.ToString());
+                Global.luaFile.SetFunction(curFunction, curFuncName);
 
                 UpdateControls();
             }
@@ -128,7 +120,7 @@ namespace LuaToolDotNet
 
         private void constantTableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(comboBoxFunctionList.SelectedIndex == -1)
+            if(curFuncName == null)
             {
                 ErrorInfo.NoFunctionSelected();
                 return;
@@ -139,7 +131,7 @@ namespace LuaToolDotNet
                 Global.constantTableForm.Close();
             }
 
-            Global.constantTableForm = new ConstantTableForm(comboBoxFunctionList.SelectedItem.ToString());
+            Global.constantTableForm = new ConstantTableForm(curFuncName);
             Global.constantTableForm.Show();
         }
 
@@ -207,19 +199,40 @@ namespace LuaToolDotNet
             Global.fileName = "";
             Global.luaFile = null;
             listViewMain.Items.Clear();
-            comboBoxFunctionList.Items.Clear();
-            comboBoxFunctionList.SelectedIndex = -1;
+            buttonFunctions.Text = "Functions";
         }
 
         private void functionInfoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(comboBoxFunctionList.SelectedIndex == -1)
+            if(curFuncName == null)
             {
                 ErrorInfo.NoFunctionSelected();
                 return;
             }
 
-            new FunctionInfoForm(curFunction.Header, comboBoxFunctionList.SelectedItem.ToString()).ShowDialog();
+            new FunctionInfoForm(curFunction.Header, curFuncName).ShowDialog();
+        }
+
+        private void buttonFunctions_Click(object sender, EventArgs e)
+        {
+            if(Global.luaFile == null)
+            {
+                ErrorInfo.NoFileOpened();
+                return;
+            }
+
+            FunctionListForm funcListForm = new FunctionListForm(buttonFunctions.Text == "Functions" ? "" : buttonFunctions.Text);
+
+            funcListForm.ShowDialog();
+
+            // function choosed
+            if (funcListForm.Confirm == true)
+            {
+                curFuncName = funcListForm.FuncName;
+                buttonFunctions.Text = curFuncName;
+
+                UpdateControls();
+            }
         }
     }
 }

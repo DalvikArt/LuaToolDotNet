@@ -57,13 +57,12 @@
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.comboBoxFunctionList = new System.Windows.Forms.ComboBox();
-            this.labelFunction = new System.Windows.Forms.Label();
             this.functionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addFuncToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteFuncToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.functionInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonFunctions = new System.Windows.Forms.Button();
             this.menuStripMain.SuspendLayout();
             this.contextMenuStripListViewMain.SuspendLayout();
             this.SuspendLayout();
@@ -175,19 +174,19 @@
             // insertToolStripMenuItem
             // 
             this.insertToolStripMenuItem.Name = "insertToolStripMenuItem";
-            this.insertToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+            this.insertToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.insertToolStripMenuItem.Text = "Insert";
             // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             // 
             // toolsToolStripMenuItem
@@ -279,27 +278,6 @@
             this.deleteToolStripMenuItem1.Size = new System.Drawing.Size(113, 22);
             this.deleteToolStripMenuItem1.Text = "Delete";
             // 
-            // comboBoxFunctionList
-            // 
-            this.comboBoxFunctionList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBoxFunctionList.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.comboBoxFunctionList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxFunctionList.Location = new System.Drawing.Point(561, 2);
-            this.comboBoxFunctionList.Name = "comboBoxFunctionList";
-            this.comboBoxFunctionList.Size = new System.Drawing.Size(137, 20);
-            this.comboBoxFunctionList.TabIndex = 0;
-            this.comboBoxFunctionList.SelectedIndexChanged += new System.EventHandler(this.comboBoxFunctionList_SelectedIndexChanged);
-            // 
-            // labelFunction
-            // 
-            this.labelFunction.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelFunction.AutoSize = true;
-            this.labelFunction.Location = new System.Drawing.Point(496, 5);
-            this.labelFunction.Name = "labelFunction";
-            this.labelFunction.Size = new System.Drawing.Size(59, 12);
-            this.labelFunction.TabIndex = 2;
-            this.labelFunction.Text = "Function:";
-            // 
             // functionToolStripMenuItem
             // 
             this.functionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -335,13 +313,23 @@
             this.functionInfoToolStripMenuItem.Text = "Function Info";
             this.functionInfoToolStripMenuItem.Click += new System.EventHandler(this.functionInfoToolStripMenuItem_Click);
             // 
+            // buttonFunctions
+            // 
+            this.buttonFunctions.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.buttonFunctions.Location = new System.Drawing.Point(611, 1);
+            this.buttonFunctions.Name = "buttonFunctions";
+            this.buttonFunctions.Size = new System.Drawing.Size(80, 21);
+            this.buttonFunctions.TabIndex = 3;
+            this.buttonFunctions.Text = "Functions";
+            this.buttonFunctions.UseVisualStyleBackColor = true;
+            this.buttonFunctions.Click += new System.EventHandler(this.buttonFunctions_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(702, 434);
-            this.Controls.Add(this.labelFunction);
-            this.Controls.Add(this.comboBoxFunctionList);
+            this.Controls.Add(this.buttonFunctions);
             this.Controls.Add(this.listViewMain);
             this.Controls.Add(this.menuStripMain);
             this.MainMenuStrip = this.menuStripMain;
@@ -379,7 +367,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fileInfoToolStripMenuItem;
-        private System.Windows.Forms.ComboBox comboBoxFunctionList;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripListViewMain;
         private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem1;
@@ -387,12 +374,12 @@
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem constantTableToolStripMenuItem;
         private System.Windows.Forms.ColumnHeader columnHeaderOpMode;
-        private System.Windows.Forms.Label labelFunction;
         private System.Windows.Forms.ToolStripMenuItem functionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addFuncToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteFuncToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem functionInfoToolStripMenuItem;
+        private System.Windows.Forms.Button buttonFunctions;
     }
 }
 

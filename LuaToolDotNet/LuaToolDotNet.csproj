@@ -71,6 +71,12 @@
     <Compile Include="FunctionInfoForm.Designer.cs">
       <DependentUpon>FunctionInfoForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FunctionListForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FunctionListForm.Designer.cs">
+      <DependentUpon>FunctionListForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Global.cs" />
     <Compile Include="InstructionForm.cs">
       <SubType>Form</SubType>
@@ -99,6 +105,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FunctionInfoForm.resx">
       <DependentUpon>FunctionInfoForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FunctionListForm.resx">
+      <DependentUpon>FunctionListForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="InstructionForm.resx">
       <DependentUpon>InstructionForm.cs</DependentUpon>
