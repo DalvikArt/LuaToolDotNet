@@ -9,5 +9,5 @@ jobs:
       name: win/vs2019
     steps:
       - run:
-          command: MSBuild ./LuaToolDotNet.sln /t:Build /p:Configuration=Release /p:TargetFramework=v4.7.2
+          command: MSBuild ../LuaToolDotNet.sln /t:Build /p:Configuration=Release /p:TargetFramework=v4.7.2
           shell: powershell.exe
