@@ -14,4 +14,4 @@ jobs:
       - run:
           command: pwd
       - run:
-          command: MSBuild ../LuaToolDotNet.sln /t:Build /p:Configuration=Release /p:TargetFramework=v4.7.2
+          command: dotnet.exe publish -c Release -r win10-x86
