@@ -9,9 +9,6 @@ jobs:
       name: win/vs2019
       shell: powershell.exe
     steps:
+      - checkout
       - run:
-          command: dir
-      - run:
-          command: pwd
-      - run:
-          command: dotnet.exe publish -c Release -r win10-x86
+          command: MSBuild .\LuaToolDotNet.sln /t:Build /p:Configuration=Release /p:TargetFramework=v4.7.2
