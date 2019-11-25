@@ -1,5 +1,7 @@
 language: csharp
 solution: "./LuaToolDotNet.sln"
 
+os: windows
+
 script:
   - msbuild ./LuaToolDotNet.sln /t:Build /p:Configuration=Release /p:TargetFramework=v4.7.2
