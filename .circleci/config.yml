@@ -7,13 +7,11 @@ jobs:
   build:
     executor:
       name: win/vs2019
+      shell: powershell.exe
     steps:
       - run:
         command: ls
-        shell: powershell.exe
       - run:
         command: pwd
-        shell: powershell.exe
       - run:
         command: MSBuild ../LuaToolDotNet.sln /t:Build /p:Configuration=Release /p:TargetFramework=v4.7.2
-        shell: powershell.exe
