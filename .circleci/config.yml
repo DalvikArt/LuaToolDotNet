@@ -10,7 +10,7 @@ jobs:
       shell: powershell.exe
     steps:
       - run:
-          command: ls
+          command: dir
       - run:
           command: pwd
       - run:
