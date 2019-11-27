@@ -58,6 +58,13 @@
     <Compile Include="ConstantTableForm.designer.cs">
       <DependentUpon>ConstantTableForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Debugger.cs" />
+    <Compile Include="DebuggerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DebuggerForm.Designer.cs">
+      <DependentUpon>DebuggerForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ErrorInfo.cs" />
     <Compile Include="FileInfoForm.cs">
       <SubType>Form</SubType>
@@ -100,6 +107,9 @@
     <EmbeddedResource Include="ConstantTableForm.resx">
       <DependentUpon>ConstantTableForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="DebuggerForm.resx">
+      <DependentUpon>DebuggerForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FileInfoForm.resx">
       <DependentUpon>FileInfoForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -123,6 +133,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -138,6 +149,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\start-button.png" />
+    <None Include="Resources\start_button.png" />
     <Content Include="ToDoList.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

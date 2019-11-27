@@ -234,5 +234,15 @@ namespace LuaToolDotNet
                 UpdateControls();
             }
         }
+
+        private void debuggerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DebuggerForm debuggerForm = new DebuggerForm();
+
+            debuggerForm.Show();
+
+            debuggerForm.Left = Right;
+            debuggerForm.Top = Top / 2;
+        }
     }
 }
