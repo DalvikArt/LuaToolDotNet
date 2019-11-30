@@ -243,6 +243,7 @@
             // 
             // listViewMain
             // 
+            this.listViewMain.AllowDrop = true;
             this.listViewMain.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderIndex,
             this.columnHeaderOperation,
@@ -260,6 +261,9 @@
             this.listViewMain.TabIndex = 1;
             this.listViewMain.UseCompatibleStateImageBehavior = false;
             this.listViewMain.View = System.Windows.Forms.View.Details;
+            this.listViewMain.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.listViewMain_ItemDrag);
+            this.listViewMain.DragDrop += new System.Windows.Forms.DragEventHandler(this.listViewMain_DragDrop);
+            this.listViewMain.DragEnter += new System.Windows.Forms.DragEventHandler(this.listViewMain_DragEnter);
             this.listViewMain.DoubleClick += new System.EventHandler(this.listViewMain_DoubleClick);
             // 
             // columnHeaderIndex

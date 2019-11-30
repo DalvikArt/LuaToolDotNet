@@ -44,7 +44,30 @@ namespace LuaToolDotNet
             {
                 LuaFile.Instruction curIns = curFunction.Code[i];
 
-                string[] curItemStr = { i.ToString(), curIns.Operation.ToString(), curIns.Params.ToString(), curIns.GetOpMode().ToString(), "" };
+                string paramStr;
+                switch(curIns.GetOpMode())
+                {
+                    case LuaFile.OpMode.iABC:
+                        uint[] ABC = curIns.GetiABC();
+                        paramStr = ABC[0] + ", " + ABC[1] + ", " + ABC[2];
+                        break;
+
+                    case LuaFile.OpMode.iABx:
+                        uint[] ABx = curIns.GetiABx();
+                        paramStr = ABx[0] + ", " + ABx[1];
+                        break;
+
+                    case LuaFile.OpMode.iAsBx:
+                        int[] AsBx = curIns.GetiAsBx();
+                        paramStr = AsBx[0] + ", " + AsBx[1];
+                        break;
+
+                    default:
+                        paramStr = curIns.Params.ToString();
+                        break;
+                }
+
+                string[] curItemStr = { i.ToString(), curIns.Operation.ToString(), paramStr, curIns.GetOpMode().ToString(), "" };
                 ListViewItem curItem = new ListViewItem(curItemStr);
 
                 listViewMain.Items.Add(curItem);
@@ -60,7 +83,7 @@ namespace LuaToolDotNet
 
         private void mainForm_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -243,6 +266,65 @@ namespace LuaToolDotNet
 
             debuggerForm.Left = Right;
             debuggerForm.Top = Top / 2;
+        }
+
+        Point dragPoint;
+
+        private void listViewMain_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Copy;
+            else if (e.Data.GetDataPresent(typeof(ListViewItem)))
+            {
+                e.Effect = DragDropEffects.Move;
+                dragPoint = new Point(e.X, e.Y);
+            }
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void listViewMain_DragDrop(object sender, DragEventArgs e)
+        {
+            if(e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] dragFileNames = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (MessageBox.Show("Open file \"" + dragFileNames[0] + "\"?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    closeToolStripMenuItem_Click(sender, e);
+                    LoadFile(dragFileNames[0]);
+                }
+            }
+            else if(e.Data.GetDataPresent(typeof(ListViewItem)))
+            {
+                ListViewItem dragItem = e.Data.GetData(typeof(ListViewItem)) as ListViewItem;
+                int dragIndex = dragItem.Index;
+
+                int dropIndex;
+                Point dropPoint = listViewMain.PointToClient(new Point(e.X, e.Y));
+                ListViewItem dropItem = listViewMain.GetItemAt(dropPoint.X, dropPoint.Y);
+
+                if (dropItem == null)
+                {
+                    if (e.Y < dragPoint.Y)
+                        dropIndex = 0;
+                    else
+                        dropIndex = listViewMain.Items.Count;
+                }
+                else
+                    dropIndex = dropItem.Index;
+
+                LuaFile.Instruction dragIns = curFunction.Code[dragIndex];
+
+                curFunction.Code.RemoveAt(dragIndex);
+                curFunction.Code.Insert(dropItem == null ? dropIndex - 1 : dropIndex, dragIns);
+
+                UpdateControls();
+            }
+        }
+
+        private void listViewMain_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            DoDragDrop(e.Item, DragDropEffects.Move);
         }
     }
 }
