@@ -79,7 +79,7 @@
             this.buttonStart.Cursor = System.Windows.Forms.Cursors.Hand;
             this.buttonStart.Location = new System.Drawing.Point(17, 26);
             this.buttonStart.Name = "buttonStart";
-            this.buttonStart.Size = new System.Drawing.Size(26, 24);
+            this.buttonStart.Size = new System.Drawing.Size(25, 24);
             this.buttonStart.TabIndex = 0;
             this.buttonStart.UseVisualStyleBackColor = true;
             this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);

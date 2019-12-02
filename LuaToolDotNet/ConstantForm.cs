@@ -36,6 +36,8 @@ namespace LuaToolDotNet
 
         private void ConstantForm_Load(object sender, EventArgs e)
         {
+            Icon = Properties.Resources.lua_file_format_symbol;
+
             foreach (var cur in Enum.GetNames(typeof(LuaFile.ConstantType)))
             {
                 comboBoxType.Items.Add(cur);

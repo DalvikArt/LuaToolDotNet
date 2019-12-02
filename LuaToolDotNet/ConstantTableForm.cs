@@ -38,6 +38,8 @@ namespace LuaToolDotNet
 
         private void ConstantTableForm_Load(object sender, EventArgs e)
         {
+            Icon = Properties.Resources.lua_file_format_symbol;
+
             UpdateControls();
         }
 

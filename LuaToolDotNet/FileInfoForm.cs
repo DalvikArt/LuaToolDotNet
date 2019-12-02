@@ -25,6 +25,9 @@ namespace LuaToolDotNet
 
         private void FileInfoForm_Load(object sender, EventArgs e)
         {
+            Icon = Properties.Resources.lua_file_format_symbol;
+
+
             textBoxFileName.Text = _fileName;
 
             labelSignature.Text = Encoding.UTF8.GetString(_header.Signature);

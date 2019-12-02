@@ -76,6 +76,8 @@ namespace LuaToolDotNet
 
         private void InstructionForm_Load(object sender, EventArgs e)
         {
+            Icon = Properties.Resources.lua_file_format_symbol;
+
             // init combobox
             foreach (var cur in Enum.GetNames(typeof(LuaFile.OpCode)))
             {

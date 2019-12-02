@@ -26,6 +26,8 @@ namespace LuaToolDotNet
 
         private void FunctionListForm_Load(object sender, EventArgs e)
         {
+            Icon = Properties.Resources.lua_file_format_symbol;
+
             // init func list
             LuaFile.FuncNode funcTree = Global.luaFile.FunctionTree;
 

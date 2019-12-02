@@ -25,6 +25,8 @@ namespace LuaToolDotNet
 
         private void FunctionInfoForm_Load(object sender, EventArgs e)
         {
+            Icon = Properties.Resources.lua_file_format_symbol;
+
             labelFuntion.Text = _name;
 
             textBoxName.Text = _header.Name;

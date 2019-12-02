@@ -83,7 +83,8 @@ namespace LuaToolDotNet
 
         private void mainForm_Load(object sender, EventArgs e)
         {
-            
+            Icon = Properties.Resources.lua_file_format_symbol;
+
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
