@@ -34,6 +34,34 @@ namespace LuaToolDotNet
             UpdateControls();
         }
 
+        string GetParamString(LuaFile.Instruction ins)
+        {
+            string paramStr;
+            switch (ins.GetOpMode())
+            {
+                case LuaFile.OpMode.iABC:
+                    uint[] ABC = ins.GetiABC();
+                    paramStr = ABC[0] + ", " + ABC[1] + ", " + ABC[2];
+                    break;
+
+                case LuaFile.OpMode.iABx:
+                    uint[] ABx = ins.GetiABx();
+                    paramStr = ABx[0] + ", " + ABx[1];
+                    break;
+
+                case LuaFile.OpMode.iAsBx:
+                    int[] AsBx = ins.GetiAsBx();
+                    paramStr = AsBx[0] + ", " + AsBx[1];
+                    break;
+
+                default:
+                    paramStr = ins.Params.ToString();
+                    break;
+            }
+
+            return paramStr;
+        }
+
         private void UpdateControls()
         {
             listViewMain.Items.Clear();
@@ -44,28 +72,7 @@ namespace LuaToolDotNet
             {
                 LuaFile.Instruction curIns = curFunction.Code[i];
 
-                string paramStr;
-                switch(curIns.GetOpMode())
-                {
-                    case LuaFile.OpMode.iABC:
-                        uint[] ABC = curIns.GetiABC();
-                        paramStr = ABC[0] + ", " + ABC[1] + ", " + ABC[2];
-                        break;
-
-                    case LuaFile.OpMode.iABx:
-                        uint[] ABx = curIns.GetiABx();
-                        paramStr = ABx[0] + ", " + ABx[1];
-                        break;
-
-                    case LuaFile.OpMode.iAsBx:
-                        int[] AsBx = curIns.GetiAsBx();
-                        paramStr = AsBx[0] + ", " + AsBx[1];
-                        break;
-
-                    default:
-                        paramStr = curIns.Params.ToString();
-                        break;
-                }
+                string paramStr = GetParamString(curIns);
 
                 string[] curItemStr = { i.ToString(), curIns.Operation.ToString(), paramStr, curIns.GetOpMode().ToString(), "" };
                 ListViewItem curItem = new ListViewItem(curItemStr);
@@ -73,6 +80,110 @@ namespace LuaToolDotNet
                 listViewMain.Items.Add(curItem);
             }
         }
+
+        private void ExportFileHeader(LuaFile.LuaHeader header, FileStream fs)
+        {
+            // file name
+            string bufStr = "Bytecode file: " + Global.fileName + "\r\n";
+
+            bufStr += "<File Header>\r\n";
+
+            // signature
+            bufStr += "Signature: " + Encoding.ASCII.GetString(header.Signature) + "\r\n";
+
+            string verStr = header.Version.ToString("X");
+            string headerStr = "Luac Version:\t\t" + verStr[0] + "." + verStr[1] + "\t\t";
+            headerStr += "Format:\t\t\t\t\t" + header.Format + "\r\n";
+
+            headerStr += "Endian:\t\t\t\t" + (header.IsLittleEndian != 0 ? "Little" : "Big") + "\t";
+            headerStr += "Size Of Int:\t\t\t" + header.SizeOfInt + "\r\n";
+
+            headerStr += "Size Of Sizet:\t\t" + header.SizeOfSizeT + "\t\t";
+            headerStr += "Size Of Instruction:\t" + header.SizeOfInstruction + "\r\n";
+
+            headerStr += "Size Of LuaNumber:\t" + header.SizeOfLuaNumber + "\t\t";
+            headerStr += "LuaNumber Integral:\t\t" + (header.LuaNumIntegral != 0 ? "No" : "Yes") + "\r\n";
+
+            headerStr += "\r\n";
+
+            bufStr += headerStr;
+
+            byte[] buffer = Encoding.UTF8.GetBytes(bufStr);
+            fs.Write(buffer, 0, buffer.Length);
+        }
+
+        private void ExportFunctionHeader(LuaFile.FunctionHeader header, FileStream fs)
+        {
+            string headerStr = "<Header>\r\n";
+
+            headerStr += "Line Defined:\t\t" + header.LineDefined + "\t";
+            headerStr += "Last Line:\t\t" + header.LastLineDefined + "\r\n";
+
+            headerStr += "Nups:\t\t\t\t" + header.Nups + "\t";
+            headerStr += "Num Of Args:\t" + header.NumOfArgs + "\r\n";
+
+            headerStr += "Is Var Arg:\t\t\t" + (header.IsVarArg != 0 ? "Yes" : "No") + "\t";
+            headerStr += "Max Stack Size:\t" + header.MaxStackSize + "\r\n";
+
+            byte[] buffer = Encoding.UTF8.GetBytes(headerStr);
+            fs.Write(buffer, 0, buffer.Length);
+        }
+
+        private void ExportFunction(LuaFile.FuncNode curNode, FileStream fs)
+        {
+            /// export current function
+            // export function name
+            byte[] buffer = Encoding.UTF8.GetBytes("@" + Global.fileName + ": " + curNode.Function.Header.LineDefined + "," + curNode.Function.Header.LastLineDefined + "\r\n");
+            fs.Write(buffer, 0, buffer.Length);
+
+            // export function header
+            ExportFunctionHeader(curNode.Function.Header, fs);
+
+            buffer = Encoding.UTF8.GetBytes("<Disassambling>\r\n");
+            fs.Write(buffer, 0, buffer.Length);
+
+            // export code
+            for (int i = 0; i < curNode.Function.Code.Count; ++i)
+            {
+                LuaFile.Instruction curIns = curNode.Function.Code[i];
+
+                // export index
+                buffer = Encoding.UTF8.GetBytes("[" + i + "]\t");
+                fs.Write(buffer, 0, buffer.Length);
+
+                // export operation
+                buffer = Encoding.UTF8.GetBytes(Enum.GetName(typeof(LuaFile.OpCode), curIns.Operation) + "\t\t");
+                fs.Write(buffer, 0, buffer.Length);
+
+                // export params
+                buffer = Encoding.UTF8.GetBytes(GetParamString(curIns) + "\t");
+                fs.Write(buffer, 0, buffer.Length);
+
+                // change line
+                buffer = Encoding.UTF8.GetBytes("\r\n");
+                fs.Write(buffer, 0, buffer.Length);
+            }
+
+            buffer = Encoding.UTF8.GetBytes("\r\n");
+            fs.Write(buffer, 0, buffer.Length);
+
+            /// export children
+            foreach (var cur in curNode.Children)
+            {
+                ExportFunction(cur, fs);
+            }
+        }
+
+        private void ExportToFile(string fileName)
+        {
+            FileStream fsExportFile = new FileStream(fileName, FileMode.Create, FileAccess.Write);
+
+            ExportFileHeader(Global.luaFile.FileHeader, fsExportFile);
+            ExportFunction(Global.luaFile.FunctionTree, fsExportFile);
+
+            fsExportFile.Close();
+        }
+
         #endregion
 
         #region EVENTS
@@ -332,6 +443,18 @@ namespace LuaToolDotNet
         private void listViewMain_ItemDrag(object sender, ItemDragEventArgs e)
         {
             DoDragDrop(e.Item, DragDropEffects.Move);
+        }
+
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveDialog = new SaveFileDialog() { Title = "Export disassambling result", Filter = "Text file|*.txt|All Files|*.*", DefaultExt = ".txt" };
+
+            if (saveDialog.ShowDialog() == DialogResult.OK)
+            {
+                ExportToFile(saveDialog.FileName);
+
+                MessageBox.Show("Success!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
         }
     }
 }

@@ -64,6 +64,7 @@
             this.deleteToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonFunctions = new System.Windows.Forms.Button();
             this.debuggerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripMain.SuspendLayout();
             this.contextMenuStripListViewMain.SuspendLayout();
             this.SuspendLayout();
@@ -90,6 +91,7 @@
             this.saveToolStripMenuItem,
             this.saveAsToolStripMenuItem,
             this.toolStripSeparator3,
+            this.exportToolStripMenuItem,
             this.fileInfoToolStripMenuItem,
             this.closeToolStripMenuItem,
             this.toolStripSeparator2,
@@ -337,6 +339,13 @@
             this.debuggerToolStripMenuItem.Text = "Debugger";
             this.debuggerToolStripMenuItem.Click += new System.EventHandler(this.debuggerToolStripMenuItem_Click);
             // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportToolStripMenuItem.Text = "Export";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -394,6 +403,7 @@
         private System.Windows.Forms.ToolStripMenuItem functionInfoToolStripMenuItem;
         private System.Windows.Forms.Button buttonFunctions;
         private System.Windows.Forms.ToolStripMenuItem debuggerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
     }
 }
 

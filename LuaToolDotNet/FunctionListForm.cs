@@ -50,12 +50,12 @@ namespace LuaToolDotNet
 
         private void AddChilds(ref TreeNode curTreeNode, LuaFile.FuncNode curFuncNode)
         {
-            foreach(var cur in curFuncNode.Childs)
+            foreach(var cur in curFuncNode.Children)
             {
                 TreeNode newNode = new TreeNode(Global.GetFuncName(cur.Function));
                 curTreeNode.Nodes.Add(newNode);
 
-                foreach (var curChild in cur.Childs)
+                foreach (var curChild in cur.Children)
                     AddChilds(ref newNode, curChild);
             }
         }

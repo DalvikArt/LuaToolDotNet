@@ -155,7 +155,7 @@ namespace LuaToolDotNet
         public class FuncNode
         {
             public LuaFunction Function = new LuaFunction();
-            public List<FuncNode> Childs = new List<FuncNode>();
+            public List<FuncNode> Children = new List<FuncNode>();
         }
 
         public class Instruction
@@ -285,7 +285,7 @@ namespace LuaToolDotNet
 
             functions.Add(curNode.Function);
 
-            foreach (var cur in curNode.Childs)
+            foreach (var cur in curNode.Children)
             {
                 functions.AddRange(GetFunc(cur));
             }
@@ -310,7 +310,7 @@ namespace LuaToolDotNet
             if (curNode.Function.Header.LineDefined == linedefined && curNode.Function.Header.LastLineDefined == lastline)
                 function = curNode.Function;
             else
-                foreach (var cur in curNode.Childs)
+                foreach (var cur in curNode.Children)
                     if ((function = FindFunc(cur, index)) != null)
                         break;
 
@@ -337,7 +337,7 @@ namespace LuaToolDotNet
             }
             else
             {
-                foreach (var cur in curNode.Childs)
+                foreach (var cur in curNode.Children)
                 {
                     if (SetFunc(cur, function, index) != false)
                         return true;
@@ -374,7 +374,7 @@ namespace LuaToolDotNet
             FunctionTree = new FuncNode();
             LoadFunction(ref FunctionTree);
 
-            FunctionTree = FunctionTree.Childs[0];
+            FunctionTree = FunctionTree.Children[0];
         }
 
         void LoadFunction(ref FuncNode upperNode)
@@ -393,7 +393,7 @@ namespace LuaToolDotNet
             curNode.Function.Constants = LoadConstants(ref curNode);
             curNode.Function.Debug = LoadDebug();
 
-            upperNode.Childs.Add(curNode);
+            upperNode.Children.Add(curNode);
         }
 
         List<Instruction> LoadCode()
@@ -601,8 +601,8 @@ namespace LuaToolDotNet
                 }
             }
 
-            dumper.Dump(curFunc.Childs.Count);
-            foreach(var cur in curFunc.Childs)
+            dumper.Dump(curFunc.Children.Count);
+            foreach(var cur in curFunc.Children)
             {
                 DumpFunction(cur);
             }
