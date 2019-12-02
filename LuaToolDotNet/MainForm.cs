@@ -254,6 +254,7 @@ namespace LuaToolDotNet
             {
                 curFuncName = funcListForm.FuncName;
                 buttonFunctions.Text = curFuncName;
+                curFunction = Global.luaFile.FindFunction(curFuncName);
 
                 UpdateControls();
             }
@@ -289,11 +290,16 @@ namespace LuaToolDotNet
             if(e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] dragFileNames = (string[])e.Data.GetData(DataFormats.FileDrop);
-                if (MessageBox.Show("Open file \"" + dragFileNames[0] + "\"?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if(curFunction != null)
                 {
-                    closeToolStripMenuItem_Click(sender, e);
-                    LoadFile(dragFileNames[0]);
+                    if (MessageBox.Show("Open file \"" + dragFileNames[0] + "\"?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                    {
+                        return;
+                    }
                 }
+
+                closeToolStripMenuItem_Click(sender, e);
+                LoadFile(dragFileNames[0]);
             }
             else if(e.Data.GetDataPresent(typeof(ListViewItem)))
             {

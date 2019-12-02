@@ -42,7 +42,9 @@ namespace LuaToolDotNet
             if (!string.IsNullOrEmpty(_curFuncName))
             {
                 TreeNode[] nodeFound = treeViewFunctions.Nodes.Find(_curFuncName, true);
-                treeViewFunctions.SelectedNode = nodeFound[0];
+
+                if (nodeFound.Length > 0)
+                    treeViewFunctions.SelectedNode = nodeFound[0];
             }
         }
 
