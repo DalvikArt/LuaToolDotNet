@@ -13,6 +13,8 @@ namespace LuaToolDotNet
 {
     public partial class MainForm : Form
     {
+        private readonly string _title = "Lua Instruction Editor";
+
         LuaFile.LuaFunction curFunction = null;
         string curFuncName = null;
 
@@ -30,6 +32,8 @@ namespace LuaToolDotNet
 
             curFunction = Global.luaFile.FunctionTree.Function;
             curFuncName = Global.GetFuncName(curFunction);
+
+            Text = _title + " (" + fileName + ")";
 
             UpdateControls();
         }
@@ -200,6 +204,9 @@ namespace LuaToolDotNet
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("Working on it...");
+            return;
+
             Global.fileName = "TMPFILE";
             Global.luaFile = new LuaFile(); 
 
@@ -299,9 +306,11 @@ namespace LuaToolDotNet
                 return;
             }
 
-            if (MessageBox.Show("Save file?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("Save file?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 Global.luaFile.SaveFile(Global.fileName);
+
+                MessageBox.Show("Success.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
 
@@ -335,6 +344,7 @@ namespace LuaToolDotNet
             Global.luaFile = null;
             listViewMain.Items.Clear();
             buttonFunctions.Text = "Functions";
+            Text = _title;
         }
 
         private void functionInfoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -455,6 +465,18 @@ namespace LuaToolDotNet
 
                 MessageBox.Show("Success!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
+        }
+
+        private void addFuncToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Working on it...");
+            return;
+        }
+
+        private void deleteFuncToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Working on it...");
+            return;
         }
     }
 }

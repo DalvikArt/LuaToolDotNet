@@ -1,3 +1,5 @@
 ﻿TODO:
 
-1. Fix function tree select problem.
+1. Add register identification support;
+2. Add comment function to the list view;
+3. Add contents export support.

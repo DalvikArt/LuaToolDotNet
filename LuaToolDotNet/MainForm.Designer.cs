@@ -208,12 +208,14 @@
             this.addFuncToolStripMenuItem.Name = "addFuncToolStripMenuItem";
             this.addFuncToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addFuncToolStripMenuItem.Text = "Add";
+            this.addFuncToolStripMenuItem.Click += new System.EventHandler(this.addFuncToolStripMenuItem_Click);
             // 
             // deleteFuncToolStripMenuItem
             // 
             this.deleteFuncToolStripMenuItem.Name = "deleteFuncToolStripMenuItem";
             this.deleteFuncToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.deleteFuncToolStripMenuItem.Text = "Delete";
+            this.deleteFuncToolStripMenuItem.Click += new System.EventHandler(this.deleteFuncToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
